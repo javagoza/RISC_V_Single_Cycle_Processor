@@ -17,6 +17,82 @@ This repository contains the RTL (Register-Transfer Level) design for a fundamen
 * **Testbenches:** Includes multiple testbenches (`testbench.sv`, `tb_all_riscv32i_is.sv`) and assembly memory files (`riscvtest.mem`) for functional verification.
 * **FPGA Ready:** Contains a top-level module (`top_artys750.sv`) targeting implementation on a Xilinx **Artix-7 FPGA** (such as the Digilent Arty S7-50).
 
+graph TD
+    subgraph Control Unit
+        ID(Main Decoder)
+        ALUDec(ALU Decoder)
+    end
+    
+    PC[Program Counter]
+    IMem[Instruction Memory]
+    RegFile[Register File]
+    ALU[Arithmetic Logic Unit]
+    DMem[Data Memory]
+    Extend[Sign/Zero Extend]
+    MuxPC(Mux)
+    MuxALU(Mux)
+    MuxWB(Mux)
+    AdderPC(Adder +4)
+    AdderBR(Adder Branch)
+    
+    
+    %% Instruction Flow
+    PC --> IMem
+    IMem -- Instruction [31:0] --> ID
+    IMem -- Instruction [31:25, 11:7] --> ALUDec
+    
+    %% Control Flow
+    ID -- Control Signals --> RegFile
+    ID -- Control Signals --> ALUDec
+    ID -- Control Signals --> DMem
+    ID -- PCSel, RegWEn, ALUSrc, MemWEn, MemToReg --> MuxPC, RegFile, MuxALU, DMem, MuxWB
+    ALUDec -- ALUOp --> ALU
+    
+    %% Register Read
+    IMem -- Instruction [19:15] --> RegFile
+    IMem -- Instruction [24:20] --> RegFile
+    RegFile -- Read Data 1 --> ALU
+    RegFile -- Read Data 2 --> MuxALU
+    
+    %% Immediate
+    IMem -- Instruction [31:7] --> Extend
+    Extend -- Extended Immediate --> MuxALU
+    Extend -- Extended Immediate (Branch/Jump) --> AdderBR
+    
+    %% ALU and Data Memory
+    MuxALU -- Op2 --> ALU
+    ALU -- Result --> MuxWB
+    ALU -- Result Address --> DMem
+    RegFile -- Read Data 2 --> DMem
+    DMem -- Read Data --> MuxWB
+    
+    %% Register Write
+    MuxWB -- Write Data --> RegFile
+    IMem -- Instruction [11:7] --> RegFile
+    
+    %% PC Control
+    PC --> AdderPC
+    AdderPC -- PC+4 --> MuxPC
+    
+    %% Conditional Branch
+    ALU -- Zero Flag --> AdderBR
+    AdderBR -- Branch Target --> MuxPC
+    
+    MuxPC -- Next PC --> PC
+    
+    style PC fill:#bbf,stroke:#333,stroke-width:2px
+    style IMem fill:#cfc,stroke:#333,stroke-width:2px
+    style RegFile fill:#fcf,stroke:#333,stroke-width:2px
+    style ALU fill:#ffc,stroke:#333,stroke-width:2px
+    style DMem fill:#cfc,stroke:#333,stroke-width:2px
+    style ID fill:#add,stroke:#333,stroke-width:2px
+    style ALUDec fill:#add,stroke:#333,stroke-width:2px
+    style MuxPC fill:#faa,stroke:#333,stroke-width:2px
+    style MuxALU fill:#faa,stroke:#333,stroke-width:2px
+    style MuxWB fill:#faa,stroke:#333,stroke-width:2px
+    style AdderPC fill:#ddd,stroke:#333,stroke-width:2px
+    style AdderBR fill:#ddd,stroke:#33
+
 ***
 
 ## Technology Stack

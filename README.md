@@ -17,6 +17,7 @@ This repository contains the RTL (Register-Transfer Level) design for a fundamen
 * **Testbenches:** Includes multiple testbenches (`testbench.sv`, `tb_all_riscv32i_is.sv`) and assembly memory files (`riscvtest.mem`) for functional verification.
 * **FPGA Ready:** Contains a top-level module (`top_artys750.sv`) targeting implementation on a Xilinx **Artix-7 FPGA** (such as the Digilent Arty S7-50).
 
+```mermaid
 graph TD
     subgraph Control Unit
         ID(Main Decoder)
@@ -92,7 +93,7 @@ graph TD
     style MuxWB fill:#faa,stroke:#333,stroke-width:2px
     style AdderPC fill:#ddd,stroke:#333,stroke-width:2px
     style AdderBR fill:#ddd,stroke:#33
-
+```
 ***
 
 ## Technology Stack

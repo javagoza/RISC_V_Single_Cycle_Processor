@@ -15,7 +15,7 @@ This repository contains the RTL (Register-Transfer Level) design for a fundamen
 * **Modularity:** Cleanly separated modules for major components (ALU, Register File, Memory, Controller, etc.).
 * **Language:** Developed entirely in **SystemVerilog (.sv)**.
 * **Testbenches:** Includes multiple testbenches (`testbench.sv`, `tb_all_riscv32i_is.sv`) and assembly memory files (`riscvtest.mem`) for functional verification.
-* **FPGA Ready:** Contains a top-level module (`top_artys750.sv`) targeting implementation on a Xilinx **Artix-7 FPGA** (such as the Digilent Arty S7-50).
+* **FPGA Ready:** Contains a top-level module (`top_artys750.sv`) targeting implementation on a Digilent Arty S7-50 (AMD Spartan-7).
 
 ***
 
@@ -26,7 +26,7 @@ This repository contains the RTL (Register-Transfer Level) design for a fundamen
 | **HDL** | **SystemVerilog (.sv)** |
 | **ISA** | **RISC-V (RV32I)** |
 | **Simulation** | Any standard SystemVerilog simulator (e.g., Icarus Verilog, ModelSim/QuestaSim, Vivado Simulator) |
-| **Synthesis Target** | Xilinx FPGAs (specifically includes a top file for **Artix-7**) |
+| **Synthesis Target** | Xilinx FPGAs (specifically includes a top file for **Digilent Arty S7-50 (AMD Spartan-7)**) |
 
 ***
 
@@ -90,7 +90,7 @@ The testbench will load instructions from a `.mem` file (like `riscvtest.mem`), 
 The design includes a top-level file (`top_artys750.sv`) for synthesis.
 
 1.  **Tool Flow:** Use a synthesis tool like **Xilinx Vivado**.
-2.  **Create Project:** Create a new project in Vivado targeting the **Artix-7** family (or your specific board).
+2.  **Create Project:** Create a new project in Vivado targeting the **Arty S7 (AMD Spartan-7)** family (or your specific board).
 3.  **Add Sources:** Add all `.sv` files in the repository as design sources.
 4.  **Set Top Module:** Set the top-level entity to `top_artys750` (or `riscvsingle` if testing without FPGA I/O).
 5.  **Synthesize and Implement:** Run the standard synthesis, implementation, and bitstream generation flow.
